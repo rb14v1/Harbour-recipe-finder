@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #f7f5f2;
+  color: #222;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #2f3e2f;
+  color: #fff;
+}
+
+.navbar a {
+  color: #fff;
+  margin-right: 16px;
+  text-decoration: none;
+}
+
+.navbar .brand {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.content {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+form label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+form input,
+form textarea {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.error {
+  color: #b00020;
+}
+
+.auth-page {
+  max-width: 400px;
+  margin: 40px auto;
+}
+
+.recipe-list {
+  list-style: none;
+  padding: 0;
+}
+
+.recipe-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.recipe-card pre {
+  white-space: pre-wrap;
+  font-family: inherit;
+  background: #fafafa;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.recipe-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.label {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.search-form input {
+  flex: 1;
+}
+
+.stub-note {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.suggestion {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.match-list {
+  list-style: none;
+  padding: 0;
+}
+
+.match-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #eee;
+  margin-bottom: 6px;
+  border-radius: 4px;
+}
+
+.hint {
+  color: #555;
+  font-size: 0.9rem;
+}
