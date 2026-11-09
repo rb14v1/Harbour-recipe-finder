@@ -55,6 +55,7 @@ python -m venv venv
 venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 set USE_SQLITE=True          # Windows cmd; $env:USE_SQLITE="True" in PowerShell
+# DJANGO_SECRET_KEY (and POSTGRES_PASSWORD for Postgres) must be set in the environment or .env
 python manage.py makemigrations
 python manage.py migrate
 python manage.py test
@@ -62,7 +63,7 @@ python manage.py runserver
 ```
 
 The `migrate` step runs a data migration that seeds a demo user
-(`demo@example.com` / `demo12345`) and ~13 sample recipes across several
+(credentials are supplied via environment variables, not documented here) and ~13 sample recipes across several
 cuisines, each with a stub embedding computed at seed time. The seed
 migration is idempotent — running `migrate` again does not duplicate rows.
 
