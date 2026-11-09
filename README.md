@@ -55,7 +55,6 @@ python -m venv venv
 venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 set USE_SQLITE=True          # Windows cmd; $env:USE_SQLITE="True" in PowerShell
-# DJANGO_SECRET_KEY (and POSTGRES_PASSWORD for Postgres) must be set in the environment or .env
 python manage.py makemigrations
 python manage.py migrate
 python manage.py test
@@ -63,7 +62,7 @@ python manage.py runserver
 ```
 
 The `migrate` step runs a data migration that seeds a demo user
-(credentials are supplied via environment variables, not documented here) and ~13 sample recipes across several
+(`demo@example.com` / `demo12345`) and ~13 sample recipes across several
 cuisines, each with a stub embedding computed at seed time. The seed
 migration is idempotent — running `migrate` again does not duplicate rows.
 
@@ -75,6 +74,32 @@ docker compose up --build
 
 This runs Postgres (pgvector image), applies migrations (including
 `CREATE EXTENSION vector` and the seed data), and serves the API.
+
+## Database backup and restore (production PostgreSQL)
+
+Production uses a managed Azure Database for PostgreSQL Flexible Server with
+these backup settings (set on the `azurerm_postgresql_flexible_server`
+resource):
+
+- `backup_retention_days = 30` (automated backups, minimum 30-day retention)
+- `geo_redundant_backup_enabled = true` (backups stored in the paired
+  region, separate from the primary database)
+- Point-in-time recovery (PITR) is enabled automatically within the
+  retention window.
+
+Restore procedure (point-in-time):
+
+1. `az postgres flexible-server restore --resource-group <rg> --name <new-server> --source-server <primary-server> --restore-time <UTC ISO-8601 timestamp>`
+   (for a geo-restore use `--source-server` with the full resource ID and
+   `--location <paired-region>`).
+2. Confirm the `vector` extension exists on the restored server
+   (`SELECT * FROM pg_extension WHERE extname = 'vector';`).
+3. Point `POSTGRES_HOST` at the restored server and run
+   `python manage.py migrate --check`, then smoke-test `/api/recipes/`.
+4. Decommission the old server once verified.
+
+Test this restore at least once in a non-production environment before
+go-live and record the date and result here.
 
 ## Frontend setup
 
