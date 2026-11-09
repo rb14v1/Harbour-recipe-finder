@@ -1,14 +1,17 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase
 
+import secrets
+
 User = get_user_model()
+TEST_PASSWORD = "Aa1" + secrets.token_urlsafe(16)
 
 
 class AuthFlowTests(APITestCase):
     def test_register_returns_tokens_and_user(self):
         response = self.client.post(
             "/api/auth/register/",
-            {"email": "newuser@example.com", "password": "StrongPass123", "first_name": "New"},
+            {"email": "newuser@example.com", "password": TEST_PASSWORD, "first_name": "New"},
             format="json",
         )
         self.assertEqual(response.status_code, 201)
@@ -20,11 +23,11 @@ class AuthFlowTests(APITestCase):
         User.objects.create_user(
             username="loginuser@example.com",
             email="loginuser@example.com",
-            password="StrongPass123",
+            password=TEST_PASSWORD,
         )
         response = self.client.post(
             "/api/auth/login/",
-            {"email": "loginuser@example.com", "password": "StrongPass123"},
+            {"email": "loginuser@example.com", "password": TEST_PASSWORD},
             format="json",
         )
         self.assertEqual(response.status_code, 200)
@@ -35,7 +38,7 @@ class AuthFlowTests(APITestCase):
         User.objects.create_user(
             username="loginuser2@example.com",
             email="loginuser2@example.com",
-            password="StrongPass123",
+            password=TEST_PASSWORD,
         )
         response = self.client.post(
             "/api/auth/login/",
@@ -50,7 +53,7 @@ class AuthFlowTests(APITestCase):
 
     def test_me_returns_current_user(self):
         user = User.objects.create_user(
-            username="meuser@example.com", email="meuser@example.com", password="StrongPass123"
+            username="meuser@example.com", email="meuser@example.com", password=TEST_PASSWORD
         )
         self.client.force_authenticate(user=user)
         response = self.client.get("/api/auth/me/")
@@ -61,11 +64,11 @@ class AuthFlowTests(APITestCase):
         user = User.objects.create_user(
             username="logoutuser@example.com",
             email="logoutuser@example.com",
-            password="StrongPass123",
+            password=TEST_PASSWORD,
         )
         login_response = self.client.post(
             "/api/auth/login/",
-            {"email": "logoutuser@example.com", "password": "StrongPass123"},
+            {"email": "logoutuser@example.com", "password": TEST_PASSWORD},
             format="json",
         )
         refresh = login_response.data["refresh"]
